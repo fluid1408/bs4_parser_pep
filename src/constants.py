@@ -19,3 +19,5 @@ EXPECTED_STATUS = {
     '': ('Draft', 'Active'),
 }
 DOWNLOAD_FOLDER = 'downloads'
+LOG_DIR = BASE_DIR / 'logs'
+LOG_FILE = LOG_DIR / 'parser.log'

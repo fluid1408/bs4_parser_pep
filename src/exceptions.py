@@ -3,7 +3,7 @@ class ParserFindTagException(Exception):
     pass
 
 
-class ParserNotFindWersion(Exception):
+class ParserNotFindVersion(Exception):
     """Не найден список c версиями Python"""
     pass
 
