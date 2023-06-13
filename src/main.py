@@ -4,12 +4,10 @@ from collections import defaultdict
 from urllib.parse import urljoin
 
 import requests_cache
-from bs4 import BeautifulSoup
 from configs import configure_argument_parser, configure_logging
 from constants import (BASE_DIR, DOWNLOAD_FOLDER, EXPECTED_STATUS,
                        MAIN_DOC_URL, PEP_URL)
-from exceptions import (ParserFindTagException, ParserNotFindVersion,
-                        RequestError)
+from exceptions import ParserNotFindVersion
 from outputs import control_output
 from tqdm import tqdm
 from utils import create_soup, find_tag, get_response
@@ -20,6 +18,7 @@ UNMATCH_STATUSES_MESSAGE = ('Несовпадающие статусы:\n'
                             '{pep_link}\n'
                             'Статус в карточке: {status}\n'
                             'Ожидаемые статусы: {expected_status}')
+
 
 def whats_new(session):
     results = [('Ссылка на статью', 'Заголовок', 'Редактор, Автор')]
@@ -46,7 +45,6 @@ def whats_new(session):
         )
     list(map(logging.error, logs))
     return results
-
 
 
 def latest_versions(session):

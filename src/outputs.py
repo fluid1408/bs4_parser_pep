@@ -8,9 +8,11 @@ from prettytable import PrettyTable
 
 INFO_MESSAGE = 'Файл с результатами был сохранён: {file_path}'
 
+
 def default_output(results, *cli_args):
     for row in results:
         print(*row)
+
 
 def pretty_output(results, *cli_args):
     table = PrettyTable()
@@ -30,6 +32,7 @@ def file_output(results, cli_args):
     with open(file_path, 'w', encoding='utf-8') as csvfile:
         csv.writer(csvfile, csv.unix_dialect()).writerows(results)
     logging.info(INFO_MESSAGE.format(file_path=file_path))
+
 
 CHOICES = {
     OUTPUT_PRETTY: pretty_output,

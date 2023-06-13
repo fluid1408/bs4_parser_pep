@@ -6,6 +6,7 @@ GET_REQUEST_ERROR = ('Возникла ошибка {request_error}'
                      'при загрузке страницы {url}')
 ERROR_MESSAGE = 'Не найден тег {tag} {attrs}'
 
+
 def get_response(session, url):
     try:
         response = session.get(url)
