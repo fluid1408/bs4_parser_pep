@@ -4,14 +4,20 @@ from collections import defaultdict
 from urllib.parse import urljoin
 
 import requests_cache
+from tqdm import tqdm
+
 from configs import configure_argument_parser, configure_logging
 from constants import (BASE_DIR, DOWNLOAD_FOLDER, EXPECTED_STATUS,
                        MAIN_DOC_URL, PEP_URL)
 from exceptions import ParserNotFindVersion
 from outputs import control_output
-from tqdm import tqdm
 from utils import create_soup, find_tag, get_response
 
+PARSER_START = 'Парсер запущен!'
+PARSER_FINISHED = 'Парсер завершил работу.'
+ARGUMENT_INFO = 'Аргументы командной строки: {args}'
+ARCHIVE_DOWNLOAD_FINISHED = 'Архив был загружен и сохранён: {archive_path}'
+ERROR_FINDING_LIST = 'Не найден список c версиями Python'
 MAIN_EXCEPTION_ERROR = 'Ошибка: {error}'
 ERROR_MESSAGE = 'Возникла ошибка при загрузке страницы {link}'
 UNMATCH_STATUSES_MESSAGE = ('Несовпадающие статусы:\n'
@@ -60,9 +66,7 @@ def latest_versions(session):
             a_tags = ul.find_all('a')
             break
         else:
-            raise ParserNotFindVersion(
-                'Не найден список c версиями Python'
-            )
+            raise ParserNotFindVersion(ERROR_FINDING_LIST)
 
     pattern = r'Python (?P<version>\d\.\d+) \((?P<status>.*)\)'
     for a_tag in a_tags:
@@ -91,7 +95,7 @@ def download(session):
     response = session.get(archive_url)
     with open(archive_path, 'wb') as file:
         file.write(response.content)
-    logging.info(f'Архив был загружен и сохранён: {archive_path}')
+    logging.info(ARCHIVE_DOWNLOAD_FINISHED)
 
 
 def pep(session):
@@ -149,12 +153,12 @@ MODE_TO_FUNCTION = {
 
 
 def main():
-    logging.info('Парсер запущен!')
+    logging.info(PARSER_START)
     try:
         configure_logging()
         arg_parser = configure_argument_parser(MODE_TO_FUNCTION.keys())
         args = arg_parser.parse_args()
-        logging.info(f'Аргументы командной строки: {args}')
+        logging.info(ARGUMENT_INFO.format(args=args))
         session = requests_cache.CachedSession()
         if args.clear_cache:
             session.cache.clear()
@@ -162,7 +166,7 @@ def main():
         results = MODE_TO_FUNCTION[parser_mode](session)
         if results is not None:
             control_output(results, args)
-        logging.info('Парсер завершил работу.')
+        logging.info(PARSER_FINISHED)
     except Exception as error:
         logging.error(MAIN_EXCEPTION_ERROR.format(error=error))
 
