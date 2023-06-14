@@ -31,7 +31,7 @@ def file_output(results, cli_args):
     file_path = results_dir / file_name
     with open(file_path, 'w', encoding='utf-8') as csvfile:
         csv.writer(
-          csvfile, 
+          csvfile,
           dialect=csv.unix_dialect()
         ).writerows(
           results
