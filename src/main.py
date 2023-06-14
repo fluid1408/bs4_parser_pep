@@ -95,7 +95,7 @@ def download(session):
     response = session.get(archive_url)
     with open(archive_path, 'wb') as file:
         file.write(response.content)
-    logging.info(ARCHIVE_DOWNLOAD_FINISHED)
+    logging.info(ARCHIVE_DOWNLOAD_FINISHED.format(archive_path=archive_path))
 
 
 def pep(session):
