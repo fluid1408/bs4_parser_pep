@@ -30,12 +30,7 @@ def file_output(results, cli_args):
     file_name = f'{parser_mode}_{now_formatted}.csv'
     file_path = results_dir / file_name
     with open(file_path, 'w', encoding='utf-8') as csvfile:
-        csv.writer(
-          csvfile,
-          dialect=csv.unix_dialect()
-        ).writerows(
-          results
-        )
+        csv.writer(csvfile,dialect=csv.unix_dialect()).writerows(results)
     logging.info(INFO_MESSAGE.format(file_path=file_path))
 
 
